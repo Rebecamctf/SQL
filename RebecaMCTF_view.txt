@@ -1,0 +1,21 @@
+/* execute o sript a seguir para criar a VIEW VW_Pagamentos_Cartao, após executar este script para visualizar a projeção
+ execute um SELECT chamando a VIEW VW_Pagamentos_Cartao
+ */
+
+CREATE VIEW VW_Pagamentos_Cartao AS 
+
+SELECT        empresa.nrCNPJ AS nrCNPJ, 
+			  pvenda.nrNSU AS nrNSU, 
+			  convert (varchar, pvenda.dtEmissao, 103) AS dtVenda, 
+			  bandeira.idBandeira AS cdBandeira, 
+			  bandeira.dsBandeira AS dsBandeira, 
+			  format (pvenda.vlPagamento, 'C', 'pt-br' ) AS vlVenda, 
+			  pvenda.qtParcelas AS qtParcelas, 
+			  pvenda.idPagamentoVenda AS cdERP
+
+FROM          card.tbPagamentoVenda AS pvenda 
+			  INNER JOIN card.tbEmpresa AS empresa ON pvenda.idEmpresa = empresa.idEmpresa 
+			  INNER JOIN card.tbBandeira AS bandeira ON pvenda.idBandeira = bandeira.idBandeira
+
+WHERE        (pvenda.idFormaPagamento IN (3, 4))
+

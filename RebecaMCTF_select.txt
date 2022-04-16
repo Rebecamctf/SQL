@@ -1,0 +1,11 @@
+select empresa.nrCNPJ, 
+	   convert (varchar, pagamento.dtEmissao, 103) dtVenda, 
+	   bandeira.dsBandeira, 
+	   count(pagamento.idPagamentoVenda) as qtPagamentos,
+	   format (sum(pagamento.vlPagamento), 'C', 'pt-br' ) vlPagamento 
+from card.tbEmpresa as empresa
+inner join card.tbPagamentoVenda as pagamento on empresa.idEmpresa = pagamento.idEmpresa
+inner join card.tbBandeira as bandeira on pagamento.idBandeira = bandeira.idBandeira
+group by empresa.nrCNPJ, pagamento.dtEmissao, bandeira.dsBandeira     
+order by pagamento.dtEmissao, bandeira.dsBandeira
+
